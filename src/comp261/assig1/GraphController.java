@@ -9,7 +9,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-// import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.canvas.Canvas;
@@ -36,8 +35,8 @@ public class GraphController {
 
     // These are use to map the nodes to the location on screen
     private Double scale = 5000.0; //5000 gives 1 pixel ~ 2 meter
-    private static final double ratioLatLon = 0.73;
-    private GisPoint mapOrigin = new GisPoint(174.77, -41.3);
+    private static final double ratioLatLon = 0.73; // in Wellington ratio of latitude to longitude
+    private GisPoint mapOrigin = new GisPoint(174.77, -41.3); // Lon Lat for Wellington
  
     private static int stopSize = 5; // drawing size of stops
     private static int moveDistance = 100; // 100 pixels
