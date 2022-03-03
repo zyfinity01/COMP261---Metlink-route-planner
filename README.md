@@ -20,7 +20,8 @@ You should submit these things:
     * describe what your code does and doesn’t do. 
     * describe the important data structures you used. The readme should be clear, but it does not have to be fancy, very plain formatting is all that is needed.
     * You can link to code in the repository with line numbers to highlight specific parts of the code for example 
-	 [**Show Main lines 11-20**](/src/comp261/assig1/Main.java#L11-20)
+	 [**Show Main lines 11-20**](/src/comp261/assig1/Main.java#L11-20) done like this 
+     `[**Show Main lines 11-20**](/src/comp261/assig1/Main.java#L11-20)`
     * It does not need to be long, but you need to help the marker see what you did. Note that for marking, you will need to sign up for a 15-minute slot with the marker. 
 
 
