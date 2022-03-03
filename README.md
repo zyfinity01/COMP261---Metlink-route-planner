@@ -20,7 +20,7 @@ You should submit these things:
     * describe what your code does and doesn’t do. 
     * describe the important data structures you used. The readme should be clear, but it does not have to be fancy, very plain formatting is all that is needed.
     * You can link to code in the repository with line numbers to highlight specific parts of the code for example 
-	 [Show Main lines 11-20](/src/comp261/assig1/Main.java#L11-20)
+	 [**Show Main lines 11-20**](/src/comp261/assig1/Main.java#L11-20)
     * It does not need to be long, but you need to help the marker see what you did. Note that for marking, you will need to sign up for a 15-minute slot with the marker. 
 
 
@@ -97,7 +97,7 @@ We recommend using Stop objects and Trip objects. The Stop objects need to store
 * Draw the graph by filling in the **displayGraph **method. This method should loop through the objects in the data structures to display them. \
 
 **Core**– Using the graph structure and other functionality. 
-* Allow the user to navigate the map, i.e. implement panning and zooming with the buttons. Whenever these buttons are pressed, the method listed in **onAction **is called, and is passed the event;
+* Allow the user to navigate the map, i.e. implement panning and zooming with the buttons. Whenever these buttons are pressed, the method listed in **onAction** is called, and is passed the event;
 * Make the program respond to the mouse so that the user can select a stop with the mouse, and the program will then highlight it, and print out the name of the stop and the ids of all the trips going through the stop. This can be done by implementing the **handleMouseClick** method which is called from the fxml function associated with canvas **onMouseClicked**. This method is passed a MouseEvent object, which contains, among other things, the coordinates of click within the graphics area. The simplest method will do a linear search through the collection of stops to find the closest one to the mouse position. (Use the methods in the “Controller” to convert between pixel-based positions on the screen and the locations in the Stops.)
 * Implement the behaviour of the search box in the top right, which should allow a user to select a Stop by entering its name. This can be done in the handleSearch method, which is called whenever the user presses ‘enter’ in the search box. When they complete their entry, the program should highlight the stop with the name (exactly) matching their input, and highlight all the trips going through that stop. Hint: Remember that there may be multiple Trip objects going through the stop, and each Trip object may have multiple Edges in it. Hint: The search box, and its contents, can be accessed with the **searchText.getText()**;
 * The text output area at the bottom of the window should be used to show information about stops and trips, and can be accessed via the **tripText.getText()**. 
