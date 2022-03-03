@@ -1,6 +1,7 @@
 {
      // You must set PATH_TO_FX to the location of the JavaFX SDK in your environment
     // Windows machine
+    // "vmArgs": "--module-path S{env:PATH_TO_FX} --add-modules javafx.controls,javafx.fxml",
     // PATH_TO_FX = "c:/Program Files/Java/javafx-sdk-17.0.1/lib"
     // ECS Linux machines 
     // export PATH_TO_FX=/usr/pkg/java/javafx-sdk-11.0.2/lib/

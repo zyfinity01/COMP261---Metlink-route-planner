@@ -51,6 +51,7 @@ public class GraphController {
     private double model2ScreenX (double modelLon) {
       return (modelLon - mapOrigin.lon) * (scale*ratioLatLon) + mapCanvas.getWidth()/2; 
     }
+    // the getHeight at the start is to flip the Y axis for drawing as JavaFX draws from the top left with Y down.
     private double model2ScreenY (double modelLat) {
       return mapCanvas.getHeight()-((modelLat - mapOrigin.lat)* scale + mapCanvas.getHeight()/2);
     }
