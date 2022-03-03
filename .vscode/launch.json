@@ -1,0 +1,18 @@
+{
+     // You must set PATH_TO_FX to the location of the JavaFX SDK in your environment
+    // Windows machine
+    // PATH_TO_FX = "c:/Program Files/Java/javafx-sdk-17.0.1/lib"
+    // ECS Linux machines 
+    // export PATH_TO_FX=/usr/pkg/java/javafx-sdk-11.0.2/lib/
+    // "vmArgs": "--module-path $PATH_TO_FX --add-modules javafx.controls",
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Bus Network",
+            "request": "launch",
+            "mainClass": "comp261.assig1.Main",
+            "vmArgs": "--module-path \"c:/Program Files/Java/javafx-sdk-17.0.1/lib\" --add-modules javafx.controls,javafx.fxml",
+        }
+    ]
+}

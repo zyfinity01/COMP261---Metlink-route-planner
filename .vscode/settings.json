@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "c:/Program Files/Java/javafx-sdk-17.0.1/lib/**/*.jar",
+    ]
+}
+// windows something like c:/Program Files/Java/javafx-sdk-17.0.1/lib/**/*.jar
+// ECS Linux something like /usr/pkg/java/javafx-sdk-11.0.2/lib/**/*.jar
