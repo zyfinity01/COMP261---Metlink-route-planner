@@ -15,10 +15,26 @@ public class Stop {
 
         
     // Constructor
-        public Stop(/*Constructor variables */) {
+        public Stop(String stopID, String stopName, double stopLon, double stopLat) {
+            this.id = stopID;
+            this.name = stopName;
+            this.loc = new GisPoint(stopLon, stopLat);
+
 
         }
 
     // add getters and setters etc
         
+    public String getName(){
+        return this.name;
+    }
+
+    public String getID(){
+        return this.id;
+    }
+
+    public GisPoint getLoc(){
+        return loc;
+    }
+    
     }

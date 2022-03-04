@@ -1,5 +1,6 @@
 package comp261.assig1;
 
+import java.util.ArrayList;
 
 //Elements in file: route_id,service_id,trip_id,trip_headsign,direction_id,block_id,shape_id,wheelchair_accessible,bikes_allowed,etm_id
 
@@ -9,6 +10,10 @@ public class Trip {
     ArrayList<String> stops;
 
 
-
+    public Trip(String stopPatternID, String tripID, ArrayList<String> stops){
+        this.stop_pattern_id = stopPatternID;
+        this.tripId = tripID;
+        this.stops = stops;
+    }
 
 }

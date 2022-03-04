@@ -1,5 +1,6 @@
 package comp261.assig1;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 

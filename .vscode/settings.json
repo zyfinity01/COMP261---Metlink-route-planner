@@ -2,7 +2,7 @@
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
-        "c:/Program Files/Java/javafx-sdk-17.0.1/lib/**/*.jar",
+        "C:/Program Files/Java/javafx-sdk-17.0.2/lib/**/*.jar",
     ]
 }
 // windows something like c:/Program Files/Java/javafx-sdk-17.0.1/lib/**/*.jar
