@@ -20,7 +20,6 @@ public class Stop {
             this.name = stopName;
             this.loc = new GisPoint(stopLon, stopLat);
 
-
         }
 
     // add getters and setters etc
