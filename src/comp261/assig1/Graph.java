@@ -1,6 +1,5 @@
 package comp261.assig1;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,7 +19,7 @@ public class Graph {
 
         //Then you could parse them using the Parser
         stops = Parser.parseStops(stopFile);
-        trips = Parser.parseRoutes(tripFile);
+        trips = Parser.parseTrips(tripFile);
 
         buildStopList();
         buildTripData();
@@ -32,7 +31,7 @@ public class Graph {
 
     }
 
-    // buildRouteData into stops
+    // buildTripData into stops
     private void buildTripData(){
         // Todo: this could be used for trips
     }

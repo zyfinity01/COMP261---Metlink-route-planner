@@ -35,9 +35,9 @@ public class Main extends Application {
         });
 
         // So you do not have to load the files every time you are testing make
-        // PATH_TO_DATA_FOLDER something like "D:/git/comp261/2022/code/Assignment 1 solution/data/"
-        graph = new Graph(  new File("C:/Users/Niraj/Documents/COMP261/Assignment1/clone/COMP261-Assignment-1/data/stops.txt"), 
-                            new File("C:/Users/Niraj/Documents/COMP261/Assignment1/clone/COMP261-Assignment-1/data/stop_patterns.txt"));
+        // PATH_TO_DATA_FOLDER something like "data/"
+        graph = new Graph(  new File("data/stops.txt"), 
+                            new File("data/stop_patterns.txt"));
         
         //force the GraphController to draw the graph after loading
         ((GraphController)loader.getController()).drawGraph();

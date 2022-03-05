@@ -81,8 +81,8 @@ public class GraphController {
         FileChooser fileChooser = new FileChooser();
         //Set to user directory or go to default if cannot access
 
-        //Replace PATH TO DATA FILES with your own path
-        File defaultNodePath = new File("PATH_TO_DATA_FILES");
+        
+        File defaultNodePath = new File("data");
         if(!defaultNodePath.canRead()) {
             defaultNodePath = new File("C:/");
         }

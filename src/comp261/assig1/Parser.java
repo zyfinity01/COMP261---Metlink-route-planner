@@ -55,7 +55,7 @@ public class Parser {
     }
 
     // parse the trip file
-    // header: route_id,service_id,trip_id,trip_headsign,direction_id,block_id,shape_id,wheelchair_accessible,bikes_allowed,etm_id
+    // header: stop_pattern_id,stop_id,stop_sequence,timepoint
     public static /*Data Type*/ parseTrips(File tripFile){
 
         /*Data Type*/ trips = /*Data Init*/
