@@ -43,6 +43,7 @@ public class Main extends Application {
         ((GraphController)loader.getController()).drawGraph();
 
         
+        
     }
 
 

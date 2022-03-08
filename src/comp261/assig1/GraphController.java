@@ -109,43 +109,43 @@ public class GraphController {
 
     public void handleZoomin(ActionEvent event) {
         System.out.println("Zoom in event " + event.getEventType()); 
-// Todo: zoom in
-
+        scale *= zoomFactor;
+        drawGraph();
         event.consume();  
     }
 
     public void handleZoomout(ActionEvent event) {
         System.out.println("Zoom out event " + event.getEventType()); 
-// Todo: zoom out
-
+        scale *= 1.0/zoomFactor;
+        drawGraph();
         event.consume();  
     }
 
     public void handleUp(ActionEvent event) {
         System.out.println("Move up event " + event.getEventType()); 
- // Todo: move up
-
+        mapOrigin.add(0, moveDistance/scale);
+        drawGraph();
         event.consume();  
     }
 
     public void handleDown(ActionEvent event) {
         System.out.println("Move Down event " + event.getEventType()); 
-// Todo: move down
-
+        mapOrigin.subtract(0, moveDistance/scale);
+        drawGraph();
         event.consume();  
     }
 
     public void handleLeft(ActionEvent event) {
         System.out.println("Move Left event " + event.getEventType()); 
-// Todo: move left
-
+        mapOrigin.add(moveDistance/scale, 0);
+        drawGraph();
         event.consume();  
     }
 
     public void handleRight(ActionEvent event) {
         System.out.println("Move Right event " + event.getEventType()); 
-// Todo: move right
-
+        mapOrigin.subtract(moveDistance/scale, 0);
+        drawGraph();
         event.consume();  
     }
 
@@ -215,18 +215,26 @@ Drawing the graph on the canvas
         
         // Todo: use the nodes form the data in graph to draw the graph
         // probably use something like this
-            Point2D screenPoint = model2Screen(stop.getPoint());
+        for(Stop stop : graph.getStops()){
+            Point2D screenPoint = model2Screen(stop.getLoc());
+            int size = 5;
             drawCircle(screenPoint.getX(), screenPoint.getY(), size);
+        }
 
         //draw edges
-        graph.//Todo: use the edge form the data in graph to draw the graph
-            gc.setStroke(Color.BLACK);
-            gc.setLineWidth(1);
-            
+
+        gc.setStroke(Color.BLACK);
+        gc.setLineWidth(1);
+
+        for(Edge edge : graph.getEdges()){  //Todo: use the edge form the data in graph to draw the graph
             //Todo: step through the edges and draw them with something like
-                    Point2D startPoint = model2Screen(fromStop.getPoint());
-                    Point2D endPoint = model2Screen(toStop.getPoint());
+                    //System.out.println("trip id: " + edge.getTripID());
+                    //System.out.println("from stop: " + edge.getFromStop().getID());
+                    //System.out.println("to stop: " + edge.getToStop().getID());
+                    Point2D startPoint = model2Screen(edge.getFromStop().getLoc());
+                    Point2D endPoint = model2Screen(edge.getToStop().getLoc());
                     drawLine(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
+            }
                 
     }
 
@@ -235,8 +243,9 @@ Drawing the graph on the canvas
         gc.setStroke(color);
         gc.setLineWidth(2);
 //Todo: step through a trip to highlight it in a different colour
-                Point2D startPoint = model2Screen(fromStop.getPoint());
-                Point2D endPoint = model2Screen(toStop.getPoint());
-                drawLine(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
+                //Point2D startPoint = model2Screen(fromStop.getPoint());
+                //Point2D endPoint = model2Screen(toStop.getPoint());
+                //drawLine(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
+    }
 
 }

@@ -23,9 +23,9 @@ public class Parser {
     // tab separated stop descriptions
     // stop_id	stop_code	stop_name	stop_desc	stop_lat	stop_lon	zone_id	stop_url	location_type	parent_station	stop_timezone
 
-	public static /*Data Type*/ parseStops(File nodeFile){
+	public static ArrayList<Stop> parseStops(File nodeFile){
     	// data types to be returned to the graph 
-        /*Data Type*/ stops /*Data initialise*/
+        ArrayList<Stop> stops = new ArrayList<Stop>();
 		try {
 			// make a reader
 			BufferedReader br = new BufferedReader(new FileReader(nodeFile));
@@ -43,8 +43,8 @@ public class Parser {
                     double lat = Double.valueOf(tokens[4]);
                     double lon = Double.valueOf(tokens[5]);
 
-                    //Todo: Decide how to store the stop data
-                   
+                    //stop data stored as stop object
+                    stops.add(new Stop(stopId, stopName, lon, lat));                   
                 }
             }
             br.close();
@@ -56,15 +56,17 @@ public class Parser {
 
     // parse the trip file
     // header: stop_pattern_id,stop_id,stop_sequence,timepoint
-    public static /*Data Type*/ parseTrips(File tripFile){
+    public static ArrayList<Trip> parseTrips(File tripFile){
 
-        /*Data Type*/ trips = /*Data Init*/
+        ArrayList<Trip> trips = new ArrayList<Trip>();
 		try {
 			// make a reader
 			BufferedReader br = new BufferedReader(new FileReader(tripFile));
 			br.readLine(); // throw away the top line of the file.
 			String line;
 			// read in each line of the file
+
+            Map<String, ArrayList<String>> patternIdToStop = new HashMap<String, ArrayList<String>>();
             while ((line = br.readLine()) != null) {
                 // tokenise the line by splitting it at ",".
                 String[] tokens = line.split("[,]");
@@ -75,11 +77,19 @@ public class Parser {
                     int stopSequence = Integer.parseInt(tokens[2]);
                     String timepoint = tokens[3];
                     
-                    // Decide how to store the trip data
-
+                    if(patternIdToStop.get(stopPatternId) == null){ //check if this actually returns null or something else
+                        patternIdToStop.put(stopPatternId, new ArrayList<String>());
+                        patternIdToStop.get(stopPatternId).add(stopId);
+                    } else{
+                        patternIdToStop.get(stopPatternId).add(stopId);
+                    }
                 }
             }
             br.close();
+
+            for(String patternId : patternIdToStop.keySet()){
+                trips.add(new Trip(patternId, patternIdToStop.get(patternId)));
+            }
         } catch (IOException e) {
             throw new RuntimeException("file reading failed.");
         }

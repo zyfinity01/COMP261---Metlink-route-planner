@@ -8,10 +8,18 @@ public class Trip {
     ArrayList<String> stops;
 
 
-    public Trip(String stopPatternID, String tripID, ArrayList<String> stops){
+    public Trip(String stopPatternID, ArrayList<String> stops){
         this.stop_pattern_id = stopPatternID;
-        this.tripId = tripID;
+        this.tripId = stopPatternID;
         this.stops = stops;
+    }
+
+    public ArrayList<String> getStops(){
+        return this.stops;
+    }
+
+    public String getTripID(){
+        return this.tripId;
     }
 
 }
