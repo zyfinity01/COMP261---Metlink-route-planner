@@ -42,7 +42,9 @@ public class GraphController {
     private static int moveDistance = 100; // 100 pixels
     private static double zoomFactor = 1.1; // zoom in/out factor
 
-    private ArrayList<Stop> highlightNodes = new ArrayList<Stop>();
+    private ArrayList<Stop> highlightNodes = new ArrayList<Stop>(); //all stop objects in this list will be highlighted
+    private ArrayList<Edge> highlightEdges = new ArrayList<Edge>(); //all edge objects in this list will be highlighted
+
 
     // map model to screen using scale and origin
     private Point2D model2Screen (GisPoint modelPoint) {
@@ -152,6 +154,15 @@ public class GraphController {
     public void handleSearch(ActionEvent event) {
         System.out.println("Look up event " + event.getEventType()+ "  "+searchText.getText()); 
         String search = searchText.getText();
+        Stop stopMatched = null;
+        for(Stop stop : Main.graph.getStops()){
+            if(stop.getName().equalsIgnoreCase(search)){
+                stopMatched = stop;
+            }
+        }
+        if(stopMatched != null){
+            highlightClosestStop(stopMatched.getLoc().lon, stopMatched.getLoc().lat);
+        }
  // Todo: figure out how to add searching and by text
  // This is were a Trie would be used potentially
         
@@ -167,10 +178,18 @@ public class GraphController {
     }  
 
 
+
+
 /* handle mouse clicks on the canvas
    select the node closest to the click */
     public void handleMouseClick(MouseEvent event) {
         System.out.println("Mouse click event " + event.getEventType());
+        if(event.getEventType() == event.MOUSE_CLICKED){
+            Point2D mouseLocation = new Point2D(event.getX(), event.getY());
+            highlightClosestStop(getScreen2ModelX(mouseLocation), getScreen2ModelY(mouseLocation));
+        }
+
+
 // Todo: find node closed to mouse click
 // event.getX(), event.getY() are the mouse coordinates
        
@@ -178,16 +197,53 @@ public class GraphController {
     }
 
 
-    //find the Closest stop to the lon,lat postion
+    /* find the Closest stop to the lon,lat postion */
     public void highlightClosestStop(double lon, double lat) {
+        highlightNodes.clear();
+        highlightEdges.clear();
         double minDist = Double.MAX_VALUE;
         Stop closestStop = null;
-//Todo: find closest stop and work out how to highlight it
-//Todo: Work out highlighting the trips through this node
-
+        for(Stop stop : Main.graph.getStops()){
+            double distance = Math.hypot(lon - stop.getLoc().lon, lat - stop.getLoc().lat);
+            if(distance < minDist){
+                minDist = distance;
+                closestStop = stop;
+            }
+        }
+        ArrayList<Trip> tripsThroughStop = findTripsThroughStop(closestStop);
+        for(Trip trip : tripsThroughStop){
+            for(Edge edge : Main.graph.getEdges()){
+                if(edge.getTripID().equals(trip.getTripID())){
+                    highlightEdges.add(edge);                      //add edge objects that need to be higlighted to list
+                }
+            }
+            tripText.clear(); //clear text canvas
+            for(String stop : trip.getStops()){
+                tripText.appendText(Main.graph.stopsMap.get(stop).toString()); //output to the screen all the stops that are highlighted
+                tripText.appendText("\n");
+                highlightNodes.add(Main.graph.stopsMap.get(stop)); //add stop objects that need to be higlighted to list
+            }
+        }
+        drawGraph();
+        //Todo: find closest stop and work out how to highlight it
+        //Todo: Work out highlighting the trips through this node
     }
 
+    /* 
+    Returns an arraylist of the trip objects that include
+    the stop provided in the parameter
+    */
+    public ArrayList<Trip> findTripsThroughStop(Stop stop){
+        ArrayList<Trip> tripsThroughStop = new ArrayList<Trip>();
+        for(Trip trip : Main.graph.getTrips()){
+            if(trip.getStops().contains(stop.getID())){
+                tripsThroughStop.add(trip);
+            }
+        }
+        return tripsThroughStop;
+    }
 
+    
 
 /*
 Drawing the graph on the canvas
@@ -218,7 +274,14 @@ Drawing the graph on the canvas
         for(Stop stop : graph.getStops()){
             Point2D screenPoint = model2Screen(stop.getLoc());
             int size = 5;
-            drawCircle(screenPoint.getX(), screenPoint.getY(), size);
+            if(highlightNodes.contains(stop)){
+                gc.setFill(Color.RED);
+                drawCircle(screenPoint.getX(), screenPoint.getY(), size * 2);
+
+            } else {
+                gc.setFill(Color.BLUE);
+                drawCircle(screenPoint.getX(), screenPoint.getY(), size);
+            }
         }
 
         //draw edges
@@ -228,13 +291,14 @@ Drawing the graph on the canvas
 
         for(Edge edge : graph.getEdges()){  //Todo: use the edge form the data in graph to draw the graph
             //Todo: step through the edges and draw them with something like
-                    //System.out.println("trip id: " + edge.getTripID());
-                    //System.out.println("from stop: " + edge.getFromStop().getID());
-                    //System.out.println("to stop: " + edge.getToStop().getID());
-                    Point2D startPoint = model2Screen(edge.getFromStop().getLoc());
-                    Point2D endPoint = model2Screen(edge.getToStop().getLoc());
-                    drawLine(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
+            gc.setStroke(Color.BLACK);
+            if(highlightEdges.contains(edge)){
+                gc.setStroke(Color.RED);
             }
+            Point2D startPoint = model2Screen(edge.getFromStop().getLoc());
+            Point2D endPoint = model2Screen(edge.getToStop().getLoc());
+            drawLine(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
+        }
                 
     }
 

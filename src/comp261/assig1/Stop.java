@@ -35,5 +35,8 @@ public class Stop {
     public GisPoint getLoc(){
         return loc;
     }
+    public String toString(){
+        return this.getID() + " " + this.getName() + " at: (" + this.getLoc().lon + ", " + this.getLoc().lat + ")";
+    }
     
     }

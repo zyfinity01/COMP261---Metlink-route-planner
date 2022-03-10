@@ -11,11 +11,10 @@ public class Graph {
     private ArrayList<Trip> trips;
     private ArrayList<Edge> edges;
 
-    HashMap<String, Stop> stopsMap;
-    HashMap<String, Trip> tripsMap;
+    private double[][] adjacencyMatrix; // idk
 
-
-    private double[][] adjacencyMatrix;
+    public HashMap<String, Stop> stopsMap;
+    public HashMap<String, Trip> tripsMap;
 
     
 // constructor post parsing
