@@ -7,7 +7,6 @@ public class Edge {
     private Stop toStop;
     private String tripId;
 
-    //todo: add a constructor
 
     public Edge(Stop fromStop, Stop toStop, String tripID){
         this.fromStop = fromStop;
@@ -15,16 +14,18 @@ public class Edge {
         this.tripId = tripID;
     }
 
-    //todo: add getters and setters
 
+    //Return the stop object that is the start of the edge
     public Stop getFromStop(){
         return this.fromStop;
     }
 
+    //Return the stop object that is the end of the edge 
     public Stop getToStop(){
         return this.toStop;
     }
 
+    //Return the trip id that this edge occurs on
     public String getTripID(){
         return this.tripId;
     }

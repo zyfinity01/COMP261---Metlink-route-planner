@@ -1,7 +1,7 @@
 package comp261.assig1;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.HashMap;
 
 public class Graph {
@@ -11,10 +11,11 @@ public class Graph {
     private ArrayList<Trip> trips;
     private ArrayList<Edge> edges;
 
-    private double[][] adjacencyMatrix; // idk
 
     public HashMap<String, Stop> stopsMap;
     public HashMap<String, Trip> tripsMap;
+
+    public Trie STNode; //Stop Trie Node
 
     
 // constructor post parsing
@@ -34,8 +35,25 @@ public class Graph {
         buildTripData();
         removeInvalidStops();
         generateEdgeList();
+        generateTrieNode();
     }
 
+    /**
+     * Build trie data structure with in the STNode object
+     */
+    private void generateTrieNode() {
+        STNode = new Trie();
+        for(Stop stop : stops){
+            STNode.add(stop.getName().toCharArray(), stop);
+            //System.out.println(stop.getName());
+
+        }
+        /*List<Stop> stopsmatch = STNode.getAll("Well".toCharArray());
+
+        for(Stop stopss : stopsmatch){
+            System.out.println(stopss.getName());
+        }*/
+    }
 
 
     // buildStoplist from other data structures
@@ -62,23 +80,10 @@ public class Graph {
             ArrayList<String> stopsOnTrip = trip.getStops();
             for(int i = 0; i < stopsOnTrip.size()-1; i++) {
                 edges.add(new Edge(stopsMap.get(stopsOnTrip.get(i)), stopsMap.get(stopsOnTrip.get(i+1)), trip.getTripID()));
-                /* //debugging print statements 
-                System.out.println("generating edges...");
-                System.out.println("trip id: " + trip.getTripID());
-                System.out.println("from stop: " + stopsOnTrip.get(i));
-                System.out.println("to stop: " + stopsOnTrip.get(i+1));
-                */
-                if(stopsMap.get(stopsOnTrip.get(i)) == null){
-                    System.out.println("NULL FROM STOP -------------------------------------------");
-                    System.exit(0);
-                }
-                if(stopsMap.get(stopsOnTrip.get(i+1)) == null){
-                    System.out.println("NULL TO STOP -------------------------------------------");
-                    System.exit(0);
-                }
             }
 
         }
+        System.out.println(trips.size());
     }
 
     private void removeInvalidStops(){ //removes invalid stops from every trip if it does not belong in the stopMap data structure

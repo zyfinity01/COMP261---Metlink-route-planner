@@ -77,11 +77,11 @@ public class Parser {
                     int stopSequence = Integer.parseInt(tokens[2]);
                     String timepoint = tokens[3];
                     
-                    if(patternIdToStop.get(stopPatternId) == null){ //check if this actually returns null or something else
+                    if(patternIdToStop.get(stopPatternId) == null){                 //If trip, stoplist has not been created then create one
                         patternIdToStop.put(stopPatternId, new ArrayList<String>());
-                        patternIdToStop.get(stopPatternId).add(stopId);
+                        patternIdToStop.get(stopPatternId).add(stopId); //adds stop value to newly created list
                     } else{
-                        patternIdToStop.get(stopPatternId).add(stopId);
+                        patternIdToStop.get(stopPatternId).add(stopId); //if list already exists, appends value to already created list
                     }
                 }
             }

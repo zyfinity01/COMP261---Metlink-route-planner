@@ -10,8 +10,6 @@ public class Stop {
     private String name;
     private String id;
 
-    //Todo: add additional data structures
-
 
         
     // Constructor
@@ -23,18 +21,23 @@ public class Stop {
         }
 
     // add getters and setters etc
-        
+    
+    //Return name of stop
     public String getName(){
         return this.name;
     }
 
+    //Return ID of stop
     public String getID(){
         return this.id;
     }
 
+    //Return gispoint location of stop
     public GisPoint getLoc(){
         return loc;
     }
+
+    //Return nicely formated string of stop
     public String toString(){
         return this.getID() + " " + this.getName() + " at: (" + this.getLoc().lon + ", " + this.getLoc().lat + ")";
     }

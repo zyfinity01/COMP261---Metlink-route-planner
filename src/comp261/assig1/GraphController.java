@@ -15,7 +15,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.*;
 
 import javafx.event.*;
 
@@ -151,6 +151,11 @@ public class GraphController {
         event.consume();  
     }
 
+    /*
+    * Matches stop name typed to stopname in datastructure, then uses highlightClosestStop
+    * method to highlight that specific stop resulting in all stops and edges within that trip to being highlighted
+
+    */
     public void handleSearch(ActionEvent event) {
         System.out.println("Look up event " + event.getEventType()+ "  "+searchText.getText()); 
         String search = searchText.getText();
@@ -172,6 +177,36 @@ public class GraphController {
     public void handleSearchKey(KeyEvent event) {
         System.out.println("Look up event " + event.getEventType()+ "  "+searchText.getText()); 
         String search = searchText.getText();
+        highlightNodes.clear(); //deselect all highlighted nodes
+        highlightEdges.clear(); //deselect all highlighted edges
+        if(Main.graph.stopsMap.containsKey(search)){  //if exact match is found then just highlight that stop and stops that go through it within trips.
+            Stop stopFound = Main.graph.stopsMap.get(search);
+            highlightClosestStop(stopFound.getLoc().lon, stopFound.getLoc().lat);
+            return;
+        }
+        if(search.length() > 0){
+            List<Stop> matchedStops = Main.graph.STNode.getAll(search.toCharArray());
+            if(matchedStops != null){
+                for(Stop matchedStop : matchedStops){
+                    ArrayList<Trip> tripsThroughStop = findTripsThroughStop(matchedStop);   //return a list of trips that this trip is apart of
+                    for(Trip trip : tripsThroughStop){
+                        for(Edge edge : Main.graph.getEdges()){
+                            if(edge.getTripID().equals(trip.getTripID())){
+                                highlightEdges.add(edge);                      //add edge objects that need to be higlighted to list
+                            }
+                        }
+                        tripText.clear(); //clear text canvas
+                        for(String stop : trip.getStops()){
+                            tripText.appendText(Main.graph.stopsMap.get(stop).toString()); //output to the screen all the stops that are highlighted
+                            tripText.appendText("\n");
+                            highlightNodes.add(Main.graph.stopsMap.get(stop)); //add stop objects that need to be higlighted to list
+                        }
+                    }
+                }
+            }
+            drawGraph();
+        }
+
 // Todo: figure out how to add searching and by text after each keypress
 // This is were a Trie would be used potentially
         event.consume();  
@@ -199,18 +234,18 @@ public class GraphController {
 
     /* find the Closest stop to the lon,lat postion */
     public void highlightClosestStop(double lon, double lat) {
-        highlightNodes.clear();
-        highlightEdges.clear();
+        highlightNodes.clear(); //deselect all highlighted nodes
+        highlightEdges.clear(); //deselect all highlighted edges
         double minDist = Double.MAX_VALUE;
         Stop closestStop = null;
-        for(Stop stop : Main.graph.getStops()){
+        for(Stop stop : Main.graph.getStops()){  //calculates the distance and tries to find if its the smallest in the whole list
             double distance = Math.hypot(lon - stop.getLoc().lon, lat - stop.getLoc().lat);
             if(distance < minDist){
                 minDist = distance;
-                closestStop = stop;
+                closestStop = stop;  //sets the current closest found stop
             }
         }
-        ArrayList<Trip> tripsThroughStop = findTripsThroughStop(closestStop);
+        ArrayList<Trip> tripsThroughStop = findTripsThroughStop(closestStop);   //return a list of trips that this trip is apart of
         for(Trip trip : tripsThroughStop){
             for(Edge edge : Main.graph.getEdges()){
                 if(edge.getTripID().equals(trip.getTripID())){
@@ -225,8 +260,6 @@ public class GraphController {
             }
         }
         drawGraph();
-        //Todo: find closest stop and work out how to highlight it
-        //Todo: Work out highlighting the trips through this node
     }
 
     /* 
@@ -266,33 +299,25 @@ Drawing the graph on the canvas
         }
         GraphicsContext gc = mapCanvas.getGraphicsContext2D();
         gc.clearRect(0, 0, mapCanvas.getWidth(), mapCanvas.getHeight());
-
-        // Todo:  store node list so we can use nodes to find edge end points.
-        
-        // Todo: use the nodes form the data in graph to draw the graph
-        // probably use something like this
+        //iterate through every stop and draw each stop
         for(Stop stop : graph.getStops()){
             Point2D screenPoint = model2Screen(stop.getLoc());
             int size = 5;
-            if(highlightNodes.contains(stop)){
+            if(highlightNodes.contains(stop)){   //colour red if selected at double size
                 gc.setFill(Color.RED);
                 drawCircle(screenPoint.getX(), screenPoint.getY(), size * 2);
 
             } else {
-                gc.setFill(Color.BLUE);
+                gc.setFill(Color.BLUE);          //colour blue if not selected
                 drawCircle(screenPoint.getX(), screenPoint.getY(), size);
             }
         }
 
-        //draw edges
 
-        gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
-
-        for(Edge edge : graph.getEdges()){  //Todo: use the edge form the data in graph to draw the graph
-            //Todo: step through the edges and draw them with something like
-            gc.setStroke(Color.BLACK);
-            if(highlightEdges.contains(edge)){
+        for(Edge edge : graph.getEdges()){ //iterate through edges and draw them
+            gc.setStroke(Color.BLACK); //draw black if not selected
+            if(highlightEdges.contains(edge)){ //draw as red if apart of selected stops
                 gc.setStroke(Color.RED);
             }
             Point2D startPoint = model2Screen(edge.getFromStop().getLoc());

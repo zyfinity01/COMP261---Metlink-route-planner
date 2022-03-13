@@ -14,10 +14,12 @@ public class Trip {
         this.stops = stops;
     }
 
+    //Return the list of stops within the trip
     public ArrayList<String> getStops(){
         return this.stops;
     }
-
+    
+    //Return the trip id of the trip
     public String getTripID(){
         return this.tripId;
     }
