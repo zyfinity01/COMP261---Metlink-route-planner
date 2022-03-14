@@ -14,6 +14,10 @@ public class Graph {
 
     public HashMap<String, Stop> stopsMap;
     public HashMap<String, Trip> tripsMap;
+    public HashMap<Stop, ArrayList<Stop>> stopToAStops;  //map refferring stops to asociated stops within trips
+    public HashMap<Stop, ArrayList<Edge>> stopToAEdges;  //map refferring stops to asociated stops within trips
+
+
 
     public Trie STNode; //Stop Trie Node
 
@@ -35,16 +39,54 @@ public class Graph {
         buildTripData();
         removeInvalidStops();
         generateEdgeList();
+        populateAssociatedStops();
         generateTrieNode();
     }
 
+
+
+    private void populateAssociatedStops(){
+        stopToAStops = new HashMap<Stop, ArrayList<Stop>>();
+        stopToAEdges = new HashMap<Stop, ArrayList<Edge>>();
+        for(Stop stop : stops){
+            ArrayList<Trip> tripsThroughStop = new ArrayList<Trip>();
+            for(Trip trip : trips){
+                if(trip.getStops().contains(stop.getID())){
+                    tripsThroughStop.add(trip);
+                }
+            }
+
+            for(Trip trip : tripsThroughStop){
+                for(String associatedStop : trip.getStops()){
+                    if(!stopToAStops.containsKey(stop)){
+                        stopToAStops.put((stop), new ArrayList<Stop>()); //add stop objects that need to be higlighted to list
+                    }
+                    stopToAStops.get(stop).add(stopsMap.get(associatedStop));
+                }
+
+
+                for(Edge edge : edges){
+                    if(edge.getTripID().equals(trip.getTripID())){
+                        if(!stopToAEdges.containsKey(stop)){
+                            stopToAEdges.put((stop), new ArrayList<Edge>()); //add stop objects that need to be higlighted to list
+                        }
+                        stopToAEdges.get(stop).add(edge);                     //add edge objects that need to be higlighted to list
+                    }
+                }
+            }
+        }
+
+    }
+    
     /**
      * Build trie data structure with in the STNode object
      */
     private void generateTrieNode() {
         STNode = new Trie();
         for(Stop stop : stops){
-            STNode.add(stop.getName().toCharArray(), stop);
+            if(stopToAStops.get(stop) != null){
+                STNode.add(stop.getName().toCharArray(), stop);
+            }
             //System.out.println(stop.getName());
 
         }

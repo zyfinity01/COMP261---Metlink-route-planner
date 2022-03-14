@@ -42,8 +42,8 @@ public class GraphController {
     private static int moveDistance = 100; // 100 pixels
     private static double zoomFactor = 1.1; // zoom in/out factor
 
-    private ArrayList<Stop> highlightNodes = new ArrayList<Stop>(); //all stop objects in this list will be highlighted
-    private ArrayList<Edge> highlightEdges = new ArrayList<Edge>(); //all edge objects in this list will be highlighted
+    private HashSet<Stop> highlightNodes = new HashSet<Stop>(); //all stop objects in this list will be highlighted
+    private HashSet<Edge> highlightEdges = new HashSet<Edge>(); //all edge objects in this list will be highlighted
 
 
     // map model to screen using scale and origin
@@ -179,6 +179,7 @@ public class GraphController {
         String search = searchText.getText();
         highlightNodes.clear(); //deselect all highlighted nodes
         highlightEdges.clear(); //deselect all highlighted edges
+        tripText.clear();
         if(Main.graph.stopsMap.containsKey(search)){  //if exact match is found then just highlight that stop and stops that go through it within trips.
             Stop stopFound = Main.graph.stopsMap.get(search);
             highlightClosestStop(stopFound.getLoc().lon, stopFound.getLoc().lat);
@@ -188,24 +189,40 @@ public class GraphController {
             List<Stop> matchedStops = Main.graph.STNode.getAll(search.toCharArray());
             if(matchedStops != null){
                 for(Stop matchedStop : matchedStops){
-                    ArrayList<Trip> tripsThroughStop = findTripsThroughStop(matchedStop);   //return a list of trips that this trip is apart of
-                    for(Trip trip : tripsThroughStop){
-                        for(Edge edge : Main.graph.getEdges()){
-                            if(edge.getTripID().equals(trip.getTripID())){
-                                highlightEdges.add(edge);                      //add edge objects that need to be higlighted to list
-                            }
-                        }
-                        tripText.clear(); //clear text canvas
-                        for(String stop : trip.getStops()){
-                            tripText.appendText(Main.graph.stopsMap.get(stop).toString()); //output to the screen all the stops that are highlighted
-                            tripText.appendText("\n");
-                            highlightNodes.add(Main.graph.stopsMap.get(stop)); //add stop objects that need to be higlighted to list
-                        }
+                    if(Main.graph.stopToAStops.get(matchedStop) == null){
+                        System.out.println("Empty stop id: " + matchedStop.getID() + " Stop name: " + matchedStop.getName());
                     }
+                    highlightNodes.addAll(Main.graph.stopToAStops.get(matchedStop));
+                    highlightEdges.addAll(Main.graph.stopToAEdges.get(matchedStop));
+                    /*
+                    for(Stop associatedStop : Main.graph.stopToAStops.get(matchedStop)){
+                        //tripText.appendText(associatedStop.toString() + "\n"); //output to the screen all the stops that are highlighted
+                        //tripText.appendText("\n");
+                        highlightNodes.add(associatedStop);
+                    }
+
+                    for(Edge associatedEdge : Main.graph.stopToAEdges.get(matchedStop)){
+                        highlightEdges.add(associatedEdge);
+                    }
+                    */
+                    
+                    
                 }
             }
-            drawGraph();
         }
+
+        StringBuilder stopData = new StringBuilder();
+        
+        for(Stop stop : highlightNodes){
+            stopData.append(stop.toString() + "\n");
+        }
+        tripText.appendText(stopData.toString()); //output to the screen all the stops that are highlighted
+
+        drawGraph();
+
+        
+
+
 
 // Todo: figure out how to add searching and by text after each keypress
 // This is were a Trie would be used potentially
