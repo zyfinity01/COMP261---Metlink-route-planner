@@ -2614,7 +2614,7 @@ SIML	SIML	Simla Crescent Station	SimlaCresStn	-41.24679734	174.7843365	3		0		Pac
 6289	6289	Beacon Hill Road opposite Tannadyce Street	BeaconHillRd opp Tannadyce	-41.3262573	174.8280599	3		0		Pacific/Auckland
 1382	1382	Rimu Road (near 7)	RimuRd (7)	-40.92394137	174.9949981	9		0		Pacific/Auckland
 8100	8100	Oxford Terrace opposite Epuni Street	OxfordTce opp EpuniSt	-41.2097354	174.926846	4		0		Pacific/Auckland
-1779	1779	Martinborough ÔÇô Town Hall	Martinborough-TownHall	-41.21875525	175.4611403	13		0		Pacific/Auckland
+1779	1779	Martinborough ï¿½ï¿½ï¿½ Town Hall	Martinborough-TownHall	-41.21875525	175.4611403	13		0		Pacific/Auckland
 2726	2726	Discovery Drive (near 109)	DiscoveryDr (109)	-41.11606233	174.8995678	6		0		Pacific/Auckland
 1859	1859	River Road at Church Street	RiverRd at Church	-40.9607812	175.671239	14		0		Pacific/Auckland
 7515	7515	Oriental Parade at Oriental Terrace	OrientalPde at Oriental	-41.29143216	174.7929868	1		0		Pacific/Auckland
