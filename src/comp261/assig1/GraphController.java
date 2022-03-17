@@ -8,11 +8,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+
+
 
 import java.io.File;
 import java.util.*;
@@ -113,11 +116,35 @@ public class GraphController {
         event.consume(); // this prevents other handlers from being called
     }
 
+
+    
+
     public void handleQuit(ActionEvent event) {
         System.out.println("Quitting with event " + event.getEventType());
         event.consume();
         System.exit(0);
     }
+
+
+    /**
+     * Method gets called when there is a mouse scroll
+     * @param event use returned deltaY value to see if scroll up or scroll down
+     */
+    public void addMouseScrolling(ScrollEvent event){
+        double deltaY = event.getDeltaY();
+        System.out.println(deltaY);
+        if(deltaY > 0){
+            scale *= zoomFactor;
+            drawGraph();
+            event.consume();
+        } else {
+            scale *= 1.0 / zoomFactor;
+            drawGraph();
+            event.consume();
+        }
+        
+    }
+
 
     public void handleZoomin(ActionEvent event) {
         System.out.println("Zoom in event " + event.getEventType());
@@ -125,6 +152,8 @@ public class GraphController {
         drawGraph();
         event.consume();
     }
+
+
 
     public void handleZoomout(ActionEvent event) {
         System.out.println("Zoom out event " + event.getEventType());
@@ -372,5 +401,7 @@ public class GraphController {
         // drawLine(startPoint.getX(), startPoint.getY(), endPoint.getX(),
         // endPoint.getY());
     }
+
+
 
 }

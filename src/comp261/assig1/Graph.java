@@ -40,7 +40,11 @@ public class Graph {
         populateAssociatedStops();
         generateTrieNode();
     }
-
+    /**
+     * This method generates three datastructures
+     * the purpose of this method is to create datastructures which need to be done once
+     * allowing the program after initial load to be fast and responsive
+     */
     private void populateAssociatedStops() {
         stopToAStops = new HashMap<Stop, ArrayList<Stop>>();
         stopToAEdges = new HashMap<Stop, ArrayList<Edge>>();
@@ -87,16 +91,7 @@ public class Graph {
             if (stopToAStops.get(stop) != null) {
                 STNode.add(stop.getName().toCharArray(), stop);
             }
-            // System.out.println(stop.getName());
-
         }
-        /*
-         * List<Stop> stopsmatch = STNode.getAll("Well".toCharArray());
-         * 
-         * for(Stop stopss : stopsmatch){
-         * System.out.println(stopss.getName());
-         * }
-         */
     }
 
     // buildStoplist from other data structures
@@ -119,6 +114,9 @@ public class Graph {
 
     }
 
+    /**
+     * Generates list of all edges for every trip
+     */
     private void generateEdgeList() {
         edges = new ArrayList<Edge>();
         for (Trip trip : trips) {
@@ -129,11 +127,14 @@ public class Graph {
             }
 
         }
-        System.out.println(trips.size());
+        //System.out.println(trips.size());
     }
 
-    private void removeInvalidStops() { // removes invalid stops from every trip if it does not belong in the stopMap
-                                        // data structure
+    /**
+     * Removes invalid stops from every trip if it does not belong
+     * in the stop map data structure
+     */
+    private void removeInvalidStops() {
         for (Trip trip : trips) {
             ArrayList<String> stopsOnTrip = trip.getStops();
             ArrayList<String> removeList = new ArrayList<String>();
@@ -146,7 +147,7 @@ public class Graph {
         }
     }
 
-    // Todo: getters and setters
+    //getters and setters
     public ArrayList<Stop> getStops() {
         return this.stops;
     }
