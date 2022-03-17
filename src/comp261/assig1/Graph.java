@@ -15,6 +15,8 @@ public class Graph {
     public HashMap<String, Trip> tripsMap;
     public HashMap<Stop, ArrayList<Stop>> stopToAStops; // map refferring stops to asociated stops within trips
     public HashMap<Stop, ArrayList<Edge>> stopToAEdges; // map refferring stops to asociated stops within trips
+    public HashMap<Stop, ArrayList<Trip>> stopToTrips; // map refferring stops to asociated stops within trips
+
 
     public Trie STNode; // Stop Trie Node
 
@@ -42,13 +44,16 @@ public class Graph {
     private void populateAssociatedStops() {
         stopToAStops = new HashMap<Stop, ArrayList<Stop>>();
         stopToAEdges = new HashMap<Stop, ArrayList<Edge>>();
+        stopToTrips = new HashMap<Stop, ArrayList<Trip>>();
         for (Stop stop : stops) {
             ArrayList<Trip> tripsThroughStop = new ArrayList<Trip>();
             for (Trip trip : trips) {
                 if (trip.getStops().contains(stop.getID())) {
                     tripsThroughStop.add(trip);
+                
                 }
             }
+            stopToTrips.put(stop, new ArrayList<Trip>(tripsThroughStop)); //all the trips that go through a stop
 
             for (Trip trip : tripsThroughStop) {
                 for (String associatedStop : trip.getStops()) {
@@ -110,6 +115,8 @@ public class Graph {
             tripsMap.put(trip.getTripID(), trip);
         }
         // Todo: this could be used for trips
+
+
     }
 
     private void generateEdgeList() {

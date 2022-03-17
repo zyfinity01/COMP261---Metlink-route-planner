@@ -195,6 +195,7 @@ public class GraphController {
         if (search.length() > 0) {
             List<Stop> matchedStops = Main.graph.STNode.getAll(search.toCharArray());
             if (matchedStops != null) {
+                System.out.println("matched stops: " + matchedStops.size());
                 if (matchedStops.get(0).getName().equals(search)) { // if exact match is found then just highlight that
                                                                     // stop and
                     // stops that go through it within trips.
@@ -206,12 +207,15 @@ public class GraphController {
 
                 //List<Stop> matchedStops = Main.graph.STNode.getAll(search.toCharArray());
                 for (Stop matchedStop : matchedStops) {
+                    /*
                     if (Main.graph.stopToAStops.get(matchedStop) == null) {
                         System.out.println(
                                 "Empty stop id: " + matchedStop.getID() + " Stop name: " + matchedStop.getName());
                     }
-                    highlightNodes.addAll(Main.graph.stopToAStops.get(matchedStop));
-                    highlightEdges.addAll(Main.graph.stopToAEdges.get(matchedStop)); 
+                    */
+                    
+                    highlightNodes.add(matchedStop);
+                    //highlightEdges.add(Main.graph.stopToAEdges.get(matchedStop)); 
                 }
             }
         }
@@ -261,8 +265,24 @@ public class GraphController {
                 closestStop = stop; // sets the current closest found stop
             }
         }
+        highlightNodes.addAll(Main.graph.stopToAStops.get(closestStop));
+        highlightEdges.addAll(Main.graph.stopToAEdges.get(closestStop));
+        StringBuilder tripTextNew = new StringBuilder();
+        tripTextNew.append("Associated stops of stop: " + closestStop.getName() + "\n");
+        tripTextNew.append("------------------\n");
+        for(Stop stop : Main.graph.stopToAStops.get(closestStop)){
+            tripTextNew.append(stop.toString() + "\n");
+        }
+        tripTextNew.append("------------------\n");
+        tripTextNew.append("Trips through selected stop: \n");
+        for(Trip trip : Main.graph.stopToTrips.get(closestStop)){
+            tripTextNew.append("Trip ID: " + trip.getTripID() + "\n");
+        }
+        tripText.setText(tripTextNew.toString());
+
+        /*
         ArrayList<Trip> tripsThroughStop = findTripsThroughStop(closestStop); // return a list of trips that this trip
-                                                                              // is apart of
+                                                                          // is apart of
         for (Trip trip : tripsThroughStop) {
             for (Edge edge : Main.graph.getEdges()) {
                 if (edge.getTripID().equals(trip.getTripID())) {
@@ -278,6 +298,7 @@ public class GraphController {
                                                                    // list
             }
         }
+        */
         drawGraph();
     }
 
