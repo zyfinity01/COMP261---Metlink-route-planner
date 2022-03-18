@@ -131,6 +131,7 @@ public class GraphController {
      * @param event use returned deltaY value to see if scroll up or scroll down
      */
     public void addMouseScrolling(ScrollEvent event){
+        System.out.println("Mouse scroll event" + event.getEventType());
         double deltaY = event.getDeltaY();
         System.out.println(deltaY);
         if(deltaY > 0){
@@ -144,6 +145,35 @@ public class GraphController {
         }
         
     }
+
+
+    public double dragStartX = 0;
+    public double dragStartY = 0;
+    //handle starting drag on Canvas
+    public void handleMousePressed(MouseEvent event){
+        System.out.println("Mouse pressed event" + event.getEventType());
+        //find node closest to mouse clicks
+        dragStartX = event.getX();
+        dragStartY = event.getY();
+        event.consume();
+    }
+    
+    
+    public void handleMouseDrag(MouseEvent event) {
+        System.out.println("Mouse dragstart event" + event.getEventType());
+        double dx = event.getX() - dragStartX;
+        double dy = event.getY() - dragStartY;
+        dragStartX = event.getX();
+        dragStartY = event.getY();
+        mapOrigin.lon -= dx/(scale * ratioLatLon);
+        mapOrigin.lat += dy/scale;
+        drawGraph();
+        event.consume();
+        //mapOrigin.subtract(lon, lat);
+
+    }
+    
+    
 
 
     public void handleZoomin(ActionEvent event) {
@@ -263,6 +293,7 @@ public class GraphController {
         event.consume();
     }
 
+
     /*
      * handle mouse clicks on the canvas
      * select the node closest to the click
@@ -280,10 +311,13 @@ public class GraphController {
         event.consume();
     }
 
-    /* find the Closest stop to the lon,lat postion */
-    public void highlightClosestStop(double lon, double lat) {
-        highlightNodes.clear(); // deselect all highlighted nodes
-        highlightEdges.clear(); // deselect all highlighted edges
+        /**
+     * Find the closest stop to the mouse coordinates 
+     * @param lon
+     * @param lat
+     * @return return stop that is the closts to coordinates
+     */
+    public Stop findClosestStop(double lon, double lat){
         double minDist = Double.MAX_VALUE;
         Stop closestStop = null;
         for (Stop stop : Main.graph.getStops()) { // calculates the distance and tries to find if its the smallest in
@@ -294,6 +328,14 @@ public class GraphController {
                 closestStop = stop; // sets the current closest found stop
             }
         }
+        return closestStop;
+    }
+
+    /* find the Closest stop to the lon,lat postion */
+    public void highlightClosestStop(double lon, double lat) {
+        highlightNodes.clear(); // deselect all highlighted nodes
+        highlightEdges.clear(); // deselect all highlighted edges
+        Stop closestStop = findClosestStop(lon, lat);
         highlightNodes.addAll(Main.graph.stopToAStops.get(closestStop));
         highlightEdges.addAll(Main.graph.stopToAEdges.get(closestStop));
         StringBuilder tripTextNew = new StringBuilder();
