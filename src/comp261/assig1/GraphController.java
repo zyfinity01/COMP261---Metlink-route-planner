@@ -15,8 +15,6 @@ import javafx.stage.Stage;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-
-
 import java.io.File;
 import java.util.*;
 
@@ -45,6 +43,8 @@ public class GraphController {
     private Label nodeDisplay;
     @FXML
     private TextArea tripText;
+    @FXML
+    private Button changeLang;
 
     // These are use to map the nodes to the location on screen
     private Double scale = 5000.0; // 5000 gives 1 pixel ~ 2 meter
@@ -116,25 +116,46 @@ public class GraphController {
         event.consume(); // this prevents other handlers from being called
     }
 
-
-    
-
     public void handleQuit(ActionEvent event) {
         System.out.println("Quitting with event " + event.getEventType());
         event.consume();
         System.exit(0);
     }
 
+    public boolean isEnglish = true;
+
+    public void changeLang() {
+        Stage stage = (Stage) mapCanvas.getScene().getWindow();
+        isEnglish = !isEnglish;
+        ResourceBundle bundle;
+        if (!isEnglish) {
+            Locale locale = new Locale("mi", "NZ");
+            bundle = ResourceBundle.getBundle("comp261/assig1/resources/strings", locale);
+        } else {
+            Locale locale = new Locale("en", "NZ");
+            bundle = ResourceBundle.getBundle("comp261/assig1/resources/strings", locale);
+        }
+        stage.setTitle(bundle.getString("title")); // set the title of the window from the bundle
+        load.setText(bundle.getString("load"));
+        quit.setText(bundle.getString("quit"));
+        up.setText(bundle.getString("up"));
+        down.setText(bundle.getString("down"));
+        left.setText(bundle.getString("left"));
+        right.setText(bundle.getString("right"));
+        changeLang.setText(bundle.getString("changeLang"));
+
+    }
 
     /**
      * Method gets called when there is a mouse scroll
+     * 
      * @param event use returned deltaY value to see if scroll up or scroll down
      */
-    public void addMouseScrolling(ScrollEvent event){
+    public void addMouseScrolling(ScrollEvent event) {
         System.out.println("Mouse scroll event" + event.getEventType());
         double deltaY = event.getDeltaY();
         System.out.println(deltaY);
-        if(deltaY > 0){
+        if (deltaY > 0) {
             scale *= zoomFactor;
             drawGraph();
             event.consume();
@@ -143,38 +164,34 @@ public class GraphController {
             drawGraph();
             event.consume();
         }
-        
-    }
 
+    }
 
     public double dragStartX = 0;
     public double dragStartY = 0;
-    //handle starting drag on Canvas
-    public void handleMousePressed(MouseEvent event){
+
+    // handle starting drag on Canvas
+    public void handleMousePressed(MouseEvent event) {
         System.out.println("Mouse pressed event" + event.getEventType());
-        //find node closest to mouse clicks
+        // find node closest to mouse clicks
         dragStartX = event.getX();
         dragStartY = event.getY();
         event.consume();
     }
-    
-    
+
     public void handleMouseDrag(MouseEvent event) {
         System.out.println("Mouse dragstart event" + event.getEventType());
         double dx = event.getX() - dragStartX;
         double dy = event.getY() - dragStartY;
         dragStartX = event.getX();
         dragStartY = event.getY();
-        mapOrigin.lon -= dx/(scale * ratioLatLon);
-        mapOrigin.lat += dy/scale;
+        mapOrigin.lon -= dx / (scale * ratioLatLon);
+        mapOrigin.lat += dy / scale;
         drawGraph();
         event.consume();
-        //mapOrigin.subtract(lon, lat);
+        // mapOrigin.subtract(lon, lat);
 
     }
-    
-    
-
 
     public void handleZoomin(ActionEvent event) {
         System.out.println("Zoom in event " + event.getEventType());
@@ -182,8 +199,6 @@ public class GraphController {
         drawGraph();
         event.consume();
     }
-
-
 
     public void handleZoomout(ActionEvent event) {
         System.out.println("Zoom out event " + event.getEventType());
@@ -258,23 +273,24 @@ public class GraphController {
                 if (matchedStops.get(0).getName().equals(search)) { // if exact match is found then just highlight that
                                                                     // stop and
                     // stops that go through it within trips.
-                    //System.out.println("exact found");
+                    // System.out.println("exact found");
                     // Stop stopFound = Main.graph.stopsMap.get(search);
                     highlightClosestStop(matchedStops.get(0).getLoc().lon, matchedStops.get(0).getLoc().lat);
                     return;
                 }
 
-                //List<Stop> matchedStops = Main.graph.STNode.getAll(search.toCharArray());
+                // List<Stop> matchedStops = Main.graph.STNode.getAll(search.toCharArray());
                 for (Stop matchedStop : matchedStops) {
                     /*
-                    if (Main.graph.stopToAStops.get(matchedStop) == null) {
-                        System.out.println(
-                                "Empty stop id: " + matchedStop.getID() + " Stop name: " + matchedStop.getName());
-                    }
-                    */
-                    
+                     * if (Main.graph.stopToAStops.get(matchedStop) == null) {
+                     * System.out.println(
+                     * "Empty stop id: " + matchedStop.getID() + " Stop name: " +
+                     * matchedStop.getName());
+                     * }
+                     */
+
                     highlightNodes.add(matchedStop);
-                    //highlightEdges.add(Main.graph.stopToAEdges.get(matchedStop)); 
+                    // highlightEdges.add(Main.graph.stopToAEdges.get(matchedStop));
                 }
             }
         }
@@ -293,7 +309,6 @@ public class GraphController {
         event.consume();
     }
 
-
     /*
      * handle mouse clicks on the canvas
      * select the node closest to the click
@@ -311,13 +326,14 @@ public class GraphController {
         event.consume();
     }
 
-        /**
-     * Find the closest stop to the mouse coordinates 
+    /**
+     * Find the closest stop to the mouse coordinates
+     * 
      * @param lon
      * @param lat
      * @return return stop that is the closts to coordinates
      */
-    public Stop findClosestStop(double lon, double lat){
+    public Stop findClosestStop(double lon, double lat) {
         double minDist = Double.MAX_VALUE;
         Stop closestStop = null;
         for (Stop stop : Main.graph.getStops()) { // calculates the distance and tries to find if its the smallest in
@@ -341,35 +357,39 @@ public class GraphController {
         StringBuilder tripTextNew = new StringBuilder();
         tripTextNew.append("Associated stops of stop: " + closestStop.getName() + "\n");
         tripTextNew.append("------------------\n");
-        for(Stop stop : Main.graph.stopToAStops.get(closestStop)){
+        for (Stop stop : Main.graph.stopToAStops.get(closestStop)) {
             tripTextNew.append(stop.toString() + "\n");
         }
         tripTextNew.append("------------------\n");
         tripTextNew.append("Trips through selected stop: \n");
-        for(Trip trip : Main.graph.stopToTrips.get(closestStop)){
+        for (Trip trip : Main.graph.stopToTrips.get(closestStop)) {
             tripTextNew.append("Trip ID: " + trip.getTripID() + "\n");
         }
         tripText.setText(tripTextNew.toString());
 
         /*
-        ArrayList<Trip> tripsThroughStop = findTripsThroughStop(closestStop); // return a list of trips that this trip
-                                                                          // is apart of
-        for (Trip trip : tripsThroughStop) {
-            for (Edge edge : Main.graph.getEdges()) {
-                if (edge.getTripID().equals(trip.getTripID())) {
-                    highlightEdges.add(edge); // add edge objects that need to be higlighted to list
-                }
-            }
-            tripText.clear(); // clear text canvas
-            for (String stop : trip.getStops()) {
-                tripText.appendText(Main.graph.stopsMap.get(stop).toString()); // output to the screen all the stops
-                                                                               // that are highlighted
-                tripText.appendText("\n");
-                highlightNodes.add(Main.graph.stopsMap.get(stop)); // add stop objects that need to be higlighted to
-                                                                   // list
-            }
-        }
-        */
+         * ArrayList<Trip> tripsThroughStop = findTripsThroughStop(closestStop); //
+         * return a list of trips that this trip
+         * // is apart of
+         * for (Trip trip : tripsThroughStop) {
+         * for (Edge edge : Main.graph.getEdges()) {
+         * if (edge.getTripID().equals(trip.getTripID())) {
+         * highlightEdges.add(edge); // add edge objects that need to be higlighted to
+         * list
+         * }
+         * }
+         * tripText.clear(); // clear text canvas
+         * for (String stop : trip.getStops()) {
+         * tripText.appendText(Main.graph.stopsMap.get(stop).toString()); // output to
+         * the screen all the stops
+         * // that are highlighted
+         * tripText.appendText("\n");
+         * highlightNodes.add(Main.graph.stopsMap.get(stop)); // add stop objects that
+         * need to be higlighted to
+         * // list
+         * }
+         * }
+         */
         drawGraph();
     }
 
@@ -443,7 +463,5 @@ public class GraphController {
         // drawLine(startPoint.getX(), startPoint.getY(), endPoint.getX(),
         // endPoint.getY());
     }
-
-
 
 }
