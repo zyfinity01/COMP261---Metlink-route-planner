@@ -22,12 +22,15 @@ I created many datastructures to imrpove the speed of the program, these data st
 
 Examples include:
 HashMap: stopID >> stop
+<br>
 HashMap: tripID >> trip
 
 HashMap: stop >> list(associated stops)
+<br>
 HashMap: stop >> list(associated edges)
+<br>
 HashMap: stop >> list(trip)
-
+<br>
 These particular stuctures result in being able to get associated stops/edges and trips that go through a stop all with a notation of O(1) meaning instant access.
 
 ## Challenge stuff
