@@ -21,6 +21,7 @@ One of the important data structures used in my code was the trie structure, the
 I created many datastructures to imrpove the speed of the program, these data structures are built once when launching the program and allow quick and easy access to the relevant data needed to draw the stops and edges that make up the graph.
 
 Examples include:
+<br>
 HashMap: stopID >> stop
 <br>
 HashMap: tripID >> trip
