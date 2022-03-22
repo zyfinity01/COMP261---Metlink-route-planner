@@ -7,15 +7,30 @@
 * Challenge
    * [x] Multilingal
    * [ ] Quadtree
-   * [ ] UI improvements
+   * [x] UI improvements
    * [ ] Displaying cost
 
-`write about your code`
-You could start with something like "I made UI improvements with the colour of each route being drawn using a hsb so I have a good separation of colours.  These are a hash of the stopid mod 360 so the hue is spread around."
+I have completed the Minimum, Core, Completion alongside Multilingal and UI improvements which are apart of Challenge.
+
 
 ## Important Strutures
-`write here about your stuctures` This is where you show us you understand what the code does and how it sorts information.  You could link to the code that does the Trie for example with [code for Tri add](/src/comp261/assig1/Trie.java#L18-25)
+One of the important data structures used in my code was the trie structure, the trie structure allows us to store all the stops in a way that is very efficient to retrieve, it also works well for our purpose as when we are searching through stops we want to show all the stops that match the current input, using traditional arraylists and doing full linear searches would cause the program to hang and not be as responsive. Using the trie allows us to search the datastructure character by character giving us a child of characters that can potentially complete the search term, this way we are searching through very small precurated datastructures that focus the input string.  [code for Tri get](/src/comp261/assig1/Trie.java#L41-54)
 
 ## Good example of data structure use
-I am particularly proud of
-`write something you did that is good`
+[location of data structures](/src/comp261/assig1/Graph.java#L10-18)
+I created many datastructures to imrpove the speed of the program, these data structures are built once when launching the program and allow quick and easy access to the relevant data needed to draw the stops and edges that make up the graph.
+
+Examples include:
+HashMap: stopID >> stop
+HashMap: tripID >> trip
+
+HashMap: stop >> list(associated stops)
+HashMap: stop >> list(associated edges)
+HashMap: stop >> list(trip)
+
+These particular stuctures result in being able to get associated stops/edges and trips that go through a stop all with a notation of O(1) meaning instant access.
+
+## Challenge stuff
+For challenge I managed to complete mouse panning and scroll wheel zooming with the use of scenebuilder, I used the javafx scenebuilder to set what the actions do and what methods they call.
+
+I also used scenebuilder for the language switcher button that allows the user to switch between english and tereo, I added the button using the scenebuilder GUI to drag and drop the button onto the panel.
