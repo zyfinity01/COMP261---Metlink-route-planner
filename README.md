@@ -1,4 +1,4 @@
-# COMP 261 Assignment 1 - Your Name (username)
+# COMP 261 Assignment 1 - gandhinira
 
 ## What the code does
 * [x] Minimum
